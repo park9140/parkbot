@@ -1,0 +1,18 @@
+#######################################
+# Syntax Coloring Map for AFMotor
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+UFDistance	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+record	KEYWORD2
+getLast KEYWORD2
+approachRate KEYWORD2
+
