@@ -81,7 +81,7 @@ long UFDistance::get(void) {
 void UFDistance::record(void) {
   long distance = get();
   long timeValue = millis();
-  if(distance < 2)
+  if(distance =< 0)
   {
     return;
   }
