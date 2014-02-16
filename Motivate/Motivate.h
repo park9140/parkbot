@@ -1,4 +1,31 @@
 // Parkbot motivate 
+// copyright Parkbot, 2014
+
+
+/**
+* A wrapper class for Adafruit Motor shield library
+* Desinged for a two wheel robot with easily configurable
+* functions for forward backward speed and turning.
+*
+* Example Usage:
+*
+* #include <Motivate.h>
+* #include <AFMotor.h>
+*
+* Motivate moto(1, 2);
+*
+* void setup(){
+*  
+* }
+*  
+* void loop(){
+*  moto.go(Forward, Fast);
+*  delay(1000);
+*  moto.go(RotateLeft, Fast);
+*  delay(1000); 
+* }
+*/
+
 #ifndef _Motivate_h_
 #define _Motivate_h_
 
