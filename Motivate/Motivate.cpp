@@ -3,7 +3,8 @@
 
 	Motivate::Motivate(int leftMotor, int rightMotor):
 	mLeftMotor(leftMotor, MOTOR12_64KHZ), 
-	mRightMotor(rightMotor, MOTOR12_64KHZ)
+	mRightMotor(rightMotor, MOTOR12_64KHZ),
+	mStatus("")
 	{
 
 	}
@@ -27,73 +28,80 @@
 		return sp;
 	}
 
+
+
 	int calcHalfSpeed(Speed speed)
 	{
 		int spd = ((calcSpeed(speed) + 1) / 2 ) - 1;
-		//Serial.print(spd);
 		return spd;
+	}
+
+	void Motivate::stop()
+	{
+		mLeftMotor.setSpeed(0);
+		mRightMotor.setSpeed(0);
+		mLeftMotor.run(RELEASE);
+		mRightMotor.run(RELEASE);
+		mStatus = "Stopped\n";
+	}
+
+	String Motivate::status()
+	{
+		return mStatus;
 	}
 
 	void Motivate::go(Direction direction, Speed speed)
 	{
-		//Serial.print(direction);
+		stop();
+		
+		mStatus = "";
+		int lspd = calcSpeed(speed);
+		int rspd = calcSpeed(speed);
+		int ldir = FORWARD;
+		int rdir = FORWARD;
 		switch(direction){
 
 		case Forward:
-			mLeftMotor.setSpeed( calcSpeed(speed) );
-			mRightMotor.setSpeed( calcSpeed(speed) );
-			mLeftMotor.run(FORWARD);
-			mRightMotor.run(FORWARD);
-			//Serial.print("Forward\n");
 			break;
 		case Backward:
-			mLeftMotor.setSpeed( calcSpeed(speed) );
-			mRightMotor.setSpeed( calcSpeed(speed) );
-			mLeftMotor.run(BACKWARD);
-			mRightMotor.run(BACKWARD);
-			//Serial.print("Backward\n");
+			ldir = BACKWARD;
+		    rdir = BACKWARD;
 			break;
 		case ForwardRight:
-			mLeftMotor.setSpeed( calcSpeed(speed) );
-			mRightMotor.setSpeed( calcHalfSpeed(speed)  );
-			mLeftMotor.run(FORWARD);
-			mRightMotor.run(FORWARD);
-			//Serial.print("ForwardRight\n");
-			break;
-		case ForwardLeft:
-			mLeftMotor.setSpeed( calcHalfSpeed(speed) );
-			mRightMotor.setSpeed( calcSpeed(speed)  );
-			mLeftMotor.run(FORWARD);
-			mRightMotor.run(FORWARD);
-			//Serial.print("ForwardLeft\n");
-			break;
+            rspd = calcHalfSpeed(speed);
+            break;
 		case BackwardRight:
-			mLeftMotor.setSpeed( calcSpeed(speed) );
-			mRightMotor.setSpeed( calcHalfSpeed(speed)  );
-			mLeftMotor.run(BACKWARD);
-			mRightMotor.run(BACKWARD);
-			//Serial.print("BackwardRight\n");
+            rspd = calcHalfSpeed(speed);
+			ldir = BACKWARD;
+		    rdir = BACKWARD;
+		case ForwardLeft:
+            lspd = calcHalfSpeed(speed);
 			break;
 		case BackwardLeft:
-			mLeftMotor.setSpeed( calcHalfSpeed(speed) );
-			mRightMotor.setSpeed( calcSpeed(speed)  );
-			mLeftMotor.run(BACKWARD);
-			mRightMotor.run(BACKWARD);
-			//Serial.print("BackwardLeft\n");
+			lspd = calcHalfSpeed(speed);
+			ldir = BACKWARD;
+		    rdir = BACKWARD;;
 			break;
 		case RotateLeft:
-			mLeftMotor.setSpeed( calcSpeed(speed) );
-			mRightMotor.setSpeed( calcSpeed(speed)  );
-			mLeftMotor.run(BACKWARD);
-			mRightMotor.run(FORWARD);
-			//Serial.print("RotateLeft\n");
+			ldir = BACKWARD;
+			rdir = FORWARD;
 			break;
 		case RotateRight:
-			mLeftMotor.setSpeed( calcSpeed(speed) );
-			mRightMotor.setSpeed( calcSpeed(speed)  );
-			mLeftMotor.run(FORWARD);
-			mRightMotor.run(BACKWARD);
-			//Serial.print("RotateRight\n");
+			ldir = FORWARD;
+			rdir = BACKWARD;
 			break;		
-		}
-	}
+		};
+
+		mLeftMotor.setSpeed(lspd);
+		mRightMotor.setSpeed(rspd);
+		mLeftMotor.run(ldir);
+		mRightMotor.run(rdir);
+        if(ldir == FORWARD) mStatus = "L Forward ";
+        if(ldir == BACKWARD) mStatus = "L Backward ";
+        mStatus += String(lspd, DEC);
+        if(rdir == FORWARD) mStatus += " R Forward ";
+        if(rdir == BACKWARD) mStatus += " R Backward ";
+        mStatus += String(rspd, DEC);
+        mStatus += "\n";
+	
+        }

@@ -30,6 +30,7 @@
 #define _Motivate_h_
 
 #include <AFMotor.h>
+#include <SoftwareSerial.h>
 
 enum Direction{
 	Forward,
@@ -54,11 +55,14 @@ class Motivate
 public:
 	Motivate(int leftMotor, int rightMotor);
 	//~Motivate();
+	String status();
 	void go(Direction direction, Speed speed);
+	void stop();
 
 private:
 	AF_DCMotor mRightMotor;
 	AF_DCMotor mLeftMotor;
+    String mStatus;
 };
 
 #endif
