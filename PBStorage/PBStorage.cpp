@@ -118,7 +118,7 @@ void PBStorage::ls(uint8_t flags)
 		    btSerial.print(' ');
 		    btSerial.print(p.fileSize);
 	    }
-	    btSerial.println("\n");
+	    btSerial.println("");
 	}
 }
 
